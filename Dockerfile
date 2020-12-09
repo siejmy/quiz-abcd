@@ -24,4 +24,5 @@ WORKDIR /app
 RUN apk add --no-cache ca-certificates
 COPY --from=builderbackend /app/ /app/
 COPY --from=builderfrontend /app/dist/ /app/static/frontend/
+ENV ROUTE_BASE="abcd"
 CMD ["/app/server"]

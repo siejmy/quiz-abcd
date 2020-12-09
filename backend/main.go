@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 )
 
-var routeBase = "abcd"
+var routeBase = os.Getenv("ROUTE_BASE")
 var homeRoute = fmt.Sprintf("/%s/", routeBase)
 var staticRoute = fmt.Sprintf("/%s/%s/", routeBase, "static")
 
@@ -22,11 +22,16 @@ func serveTemplate(w http.ResponseWriter, r *http.Request) {
                 fmt.Fprintf(w, "Error: %v", err)
                 return
         }
-        tmpl.ExecuteTemplate(w, "layout", nil)
+        templateData := make(map[string]interface{})
+        templateData["routeBase"] = routeBase
+        templateData["staticRoute"] = staticRoute
+        tmpl.ExecuteTemplate(w, "layout", templateData)
 }
 
 func main() {
         log.Print("abcd: starting server...")
+        log.Printf("routeBase='%s', homeRoute='%s', staticRoute='%s'", routeBase, homeRoute, staticRoute)
+
 
         fs := http.FileServer(http.Dir("./static"))
         http.Handle(staticRoute, http.StripPrefix(staticRoute, fs))
