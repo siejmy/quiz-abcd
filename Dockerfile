@@ -11,8 +11,9 @@ RUN CGO_ENABLED=0 GOOS=linux go build -mod=readonly -v -o server
 
 FROM node:14 as builderfrontend
 WORKDIR /app
-COPY frontend ./
+COPY frontend/package* ./
 RUN npm ci
+COPY frontend ./
 RUN npm run build-lib
 
 
