@@ -1,32 +1,27 @@
-# Use the official Golang image to create a build artifact.
-# This is based on Debian and sets the GOPATH to /go.
-FROM golang:1.13 as builder
-
-# Create and change to the app directory.
+FROM golang:1.13 as builderbackend
 WORKDIR /app
-
-# Retrieve application dependencies using go modules.
-# Allows container builds to reuse downloaded dependencies.
-COPY go.* ./
+COPY backend/go.* ./
 RUN go mod download
-
-# Copy local code to the container image.
-COPY . ./
-
-# Build the binary.
+COPY backend ./
 # -mod=readonly ensures immutable go.mod and go.sum in container builds.
 RUN CGO_ENABLED=0 GOOS=linux go build -mod=readonly -v -o server
 
 
-# Use the official Alpine image for a lean production container.
-# https://hub.docker.com/_/alpine
-# https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
+
+
+FROM node:14 as builderfrontend
+WORKDIR /app
+COPY frontend ./
+RUN npm ci
+RUN npm run build-lib
+
+
+
+
 FROM alpine:3
 WORKDIR /app
 RUN apk add --no-cache ca-certificates
-
-# Copy the binary to the production image from the builder stage.
-COPY --from=builder /app/ /app/
-
-# Run the web service on container startup.
+COPY --from=builderbackend /app/ /app/
+COPY --from=builderfrontend /app/dist/ /app/static/frontend/
+RUN tree -d .
 CMD ["/app/server"]
