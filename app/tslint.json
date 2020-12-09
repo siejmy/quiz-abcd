@@ -1,0 +1,9 @@
+{
+  "extends": "jblew-tslint-config",
+  "rules": {
+    "quotemark": [true, "single"],
+    "no-unused-vars": [false],
+    "no-console": [false],
+    "trailing-comma": [false]
+  }
+}
