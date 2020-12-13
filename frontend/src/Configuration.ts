@@ -1,10 +1,12 @@
 import ow from 'ow'
 
+import { QuizABCD, validateQuizABCD } from './domain'
+
 export interface Configuration {
   title: string
   reCaptchaKey: string
   facebookAppId: string
-  quizUrl: string
+  quiz: QuizABCD
 }
 
 export function validateConfiguration(c: Configuration) {
@@ -12,5 +14,6 @@ export function validateConfiguration(c: Configuration) {
   ow(c.title, 'Configuration.title', ow.string.nonEmpty)
   ow(c.reCaptchaKey, 'Configuration.reCaptchaKey', ow.string.nonEmpty)
   ow(c.facebookAppId, 'Configuration.facebookAppId', ow.string.nonEmpty)
-  ow(c.quizUrl, 'Configuration.quizUrl', ow.string)
+
+  validateQuizABCD(c.quiz)
 }
