@@ -16,7 +16,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 import { Configuration } from '../../Configuration'
-import { Quiz, QuizABCD } from '../../domain'
+import { Quiz } from '../../domain'
 
 import { ABCDQuizView } from './abcd'
 
@@ -36,7 +36,7 @@ export default class QuizPage extends Vue {
     return this.config.title
   }
 
-  get quiz(): QuizABCD {
+  get quiz(): Quiz {
     return this.config.quiz
   }
 }

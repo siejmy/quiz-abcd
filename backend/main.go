@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
@@ -75,6 +76,7 @@ func templatedRouteFactory(templateFile string) func(w http.ResponseWriter, r *h
                 templateData["routeBase"] = routeBase
                 templateData["staticRoute"] = staticRoute
                 templateData["quiz"] = quiz
+                templateData["quizJson"], _ = json.Marshal(quiz)
                 tmpl.ExecuteTemplate(w, "layout", templateData)
         }
 }
