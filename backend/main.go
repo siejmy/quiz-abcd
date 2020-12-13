@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go/v4"
@@ -49,7 +50,7 @@ func main() {
                 port = "8080"
         }
 
-        log.Printf("helloworld: listening on port %s", port)
+        log.Printf("abcd: listening on port %s", port)
         log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }
 
@@ -106,6 +107,9 @@ func serveFirestore(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleSave(w http.ResponseWriter, r *http.Request) {
+    // throttle
+    time.Sleep(200 * time.Millisecond)
+
     id := uuid.New().String()
     var result Result
     err := json.NewDecoder(r.Body).Decode(&result)
