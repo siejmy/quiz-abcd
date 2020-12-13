@@ -20,6 +20,7 @@ func getRoute(subroute string) string {
 var staticRoute = getRoute("static")
 var firebaseClient = initializeFirebase()
 var firestoreClient = initializeFirestore()
+var quiz = LoadQuiz()
 
 func main() {
         log.Print("abcd: starting server...")
@@ -29,7 +30,9 @@ func main() {
         fs := http.FileServer(http.Dir("./static"))
         http.Handle(staticRoute, http.StripPrefix(staticRoute, fs))
 
-        http.HandleFunc(getRoute(""), serveTemplate)
+        http.HandleFunc(getRoute(""), templatedRouteFactory("quiz.html"))
+        http.HandleFunc(getRoute("result"), templatedRouteFactory("result.html"))
+
         http.HandleFunc(getRoute("demo"), serveFirestore)
 
         port := os.Getenv("PORT")
@@ -58,19 +61,22 @@ func initializeFirestore() *firestore.Client {
         return client
 }
 
-func serveTemplate(w http.ResponseWriter, r *http.Request) {
-        lp := filepath.Join("templates", "layout.html")
-        fp := filepath.Join("templates", "home.html")
+func templatedRouteFactory(templateFile string) func(w http.ResponseWriter, r *http.Request) {
+        return func (w http.ResponseWriter, r *http.Request) {
+                lp := filepath.Join("templates", "layout.html")
+                fp := filepath.Join("templates", "home.html")
 
-        tmpl, err := template.ParseFiles(lp, fp)
-        if err != nil {
-                fmt.Fprintf(w, "Error: %v", err)
-                return
+                tmpl, err := template.ParseFiles(lp, fp)
+                if err != nil {
+                        fmt.Fprintf(w, "Error: %v", err)
+                        return
+                }
+                templateData := make(map[string]interface{})
+                templateData["routeBase"] = routeBase
+                templateData["staticRoute"] = staticRoute
+                templateData["quiz"] = quiz
+                tmpl.ExecuteTemplate(w, "layout", templateData)
         }
-        templateData := make(map[string]interface{})
-        templateData["routeBase"] = routeBase
-        templateData["staticRoute"] = staticRoute
-        tmpl.ExecuteTemplate(w, "layout", templateData)
 }
 
 func serveFirestore(w http.ResponseWriter, r *http.Request) {

@@ -1,0 +1,175 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap");
+
+:root {
+  --main-color: #3ace00;
+  --text-color: #555;
+}
+
+html {
+  border-top: 16px solid var(--main-color);
+}
+
+body {
+  background: white;
+  color: var(--text-color);
+  font-family: "Lato", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  margin: 0 auto !important;
+  max-width: 960px !important;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.header {
+  margin: 0 auto;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+  width: fit-content;
+  height: 120px;
+}
+
+.header a {
+  text-decoration: none;
+  color: #888;
+}
+
+.header .logo {
+  height: auto;
+  width: auto; /* makes the div same size as content */
+  float: left;
+}
+
+.header .logo img {
+  height: 120px;
+}
+
+.header .title {
+  width: auto; /* makes the div same size as content */
+  float: left;
+  height: 120px;
+}
+
+.header .title p {
+  line-height: 120px;
+  font-size: 3.2rem;
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.header .title p span {
+  font-size: 40%;
+  margin-left: -1.4rem;
+  float: right;
+  margin-top: 1.6rem;
+}
+
+/*
+.logo {
+  margin: 0 auto;
+  width: fit-content;
+  height: 120px;
+}
+
+.logo a {
+  text-decoration: none;
+}
+
+.logo img {
+  display: inline-block;
+  height: 120px;
+  float: left;
+}
+
+.logo p {
+  display: inline-block;
+  color: #999;
+  height: 120px;
+  float: right;
+}
+*/
+@media (max-width: 600px) {
+  body,
+  #message {
+    margin-top: 0;
+    background: white;
+    box-shadow: none;
+  }
+}
+
+#siejmyconsent {
+  position: fixed;
+  left: 10%;
+  right: 10%;
+  bottom: 10%;
+  background: var(--main-color);
+  padding: 16px;
+  color: white;
+  box-shadow: 2px 2px 20px 5px rgba(0, 0, 0, 0.4);
+
+  -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 1s; /* Firefox < 16 */
+  -ms-animation: fadein 1s; /* Internet Explorer */
+  -o-animation: fadein 1s; /* Opera < 12.1 */
+  animation: fadein 1s;
+}
+
+#siejmyconsent a {
+  color: white;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+#siejmyconsent .btn {
+  display: block;
+  margin: 0 auto;
+  background: white;
+  padding: 10px;
+  margin: 10px;
+  font-weight: bold;
+  color: black;
+  text-decoration: none;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+#siejmyconsent .btn:hover {
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.4) inset;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

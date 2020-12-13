@@ -1,0 +1,34 @@
+<!--      TITLE        -->
+{{define "title"}}{{.quiz.Title}} — quiz{{end}}
+
+<!--      HEAD         -->
+{{define "head"}}
+<script defer src="/__/firebase/8.0.0/firebase-app.js"></script>
+<script
+  defer
+  src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"
+></script>
+<script defer src="/__/firebase/init.js"></script>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"
+></script>
+
+<script defer type="module" src="/quizabcd/quiz.umd.min.js"></script>
+{{end}}
+
+<!--      BODY         -->
+{{define "body"}}
+<div id="quiz-app">Ładowanie...</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    quiz.mountQuiz("#quiz-app", {
+      title: "Sanktuaria w Polsce",
+      reCaptchaKey: "6Le8g9wZAAAAAP4IGzG3h1eSg-59l3m9t59qrJ8M",
+      facebookAppId: "357764061986952",
+      quizUrl: "sanktuaria/quiz.json",
+    });
+  });
+</script>
+{{end}}

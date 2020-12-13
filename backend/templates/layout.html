@@ -1,14 +1,33 @@
 {{define "layout"}}
 <!DOCTYPE html>
-<html>
+<html lang="pl">
   <head>
     <meta charset="utf-8" />
-    <title>{{template "title"}}</title>
-    <link rel="stylesheet" href="/static/stylesheets/main.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{template "title" .}}</title>
+
+    {{template "head" .}}
+    <link href="/style.css" rel="stylesheet" />
   </head>
   <body>
+    <div class="header">
+      <a href="https://siejmy.pl">
+        <div class="logo">
+          <img
+            src="{{ .staticRoute }}assets/siejmy-logo-bez-tekstu.png"
+            alt="Logo siejmy"
+          />
+        </div>
+        <div class="title">
+          <p>SIEJMY <span>quiz</span></p>
+        </div>
+      </a>
+    </div>
+
     {{template "body" .}}
-    <footer>Made with Go</footer>
+
+    <script src="{{ .staticRoute }}consent.js"></script>
+    <!-- Prayer: Gloria Patri, et Filio, et Spiritui Sancto, sicut erat in principio et nunc et semper et in saecula saeculorum. Amen. In te, Domine, speravi: non confundar in aeternum. -->
   </body>
 </html>
 {{end}}
