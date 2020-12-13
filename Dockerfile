@@ -27,4 +27,5 @@ COPY --from=builderfrontend /app/dist/ /app/static/frontend/
 ADD serviceAccount.json /serviceAccount_o5z3A5q1.json
 ENV ROUTE_BASE="abcd"
 ENV GOOGLE_APPLICATION_CREDENTIALS="/serviceAccount_o5z3A5q1.json"
+COPY demo .
 CMD ["/app/server"]
