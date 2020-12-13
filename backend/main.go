@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
@@ -11,6 +12,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go/v4"
+	"github.com/google/uuid"
 )
 
 var routeBase = os.Getenv("ROUTE_BASE")
@@ -34,6 +36,7 @@ func main() {
         http.Handle(staticRoute, http.StripPrefix(staticRoute, staticFileServer))
 
         http.HandleFunc(getRoute("quiz"), templatedRouteFactory("quiz.html"))
+        http.HandleFunc(getRoute("save"), handleSave)
         http.HandleFunc(getRoute("result"), templatedRouteFactory("result.html"))
 
         http.HandleFunc(getRoute("demo"), serveFirestore)
@@ -97,4 +100,24 @@ func serveFirestore(w http.ResponseWriter, r *http.Request) {
         }
         data := snapshot.Data()
         fmt.Fprintf(w, "Data: %+v", data)
+}
+
+func handleSave(w http.ResponseWriter, r *http.Request) {
+    decoder := json.NewDecoder(r.Body)
+    id := uuid.New().String()
+    var result Result
+    err := decoder.Decode(&result)
+    if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        fmt.Fprintf(w, "Parse error: %v", err)
+    }
+    err = result.Validate()
+    if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        fmt.Fprintf(w, "Validation failed: %v", err)
+    }
+    response := make(map[string]interface{})
+    response["id"] = id
+    response["url"] = getRoute(fmt.Sprintf("result/%s", id))
+    fmt.Fprintf(w, "%s", marshallToString(response))
 }
