@@ -8,6 +8,15 @@
 {{define "body"}}
 <p>Tu będą wyniki</p>
 <pre>
-  {{ .path }}
+  {{ .id }}
+</pre>
+<pre>
+  {{ .resultMarshalled }}
+</pre>
+<pre>
+  {{ .statsEntryMarshalled }}
+</pre>
+<pre>
+  {{ .statsSummaryMarshalled }}
 </pre>
 {{end}}

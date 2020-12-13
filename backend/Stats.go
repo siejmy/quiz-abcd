@@ -10,8 +10,8 @@ import (
 
 // StatsEntry — unit of statistics
 type StatsEntry struct {
-		CorrectCount uint `json:"correctCount" validate:"min=0"`
-		TotalCount uint `json:"totalCount" validate:"min=0"`
+		CorrectCount int `json:"correctCount" validate:"min=0"`
+		TotalCount int `json:"totalCount" validate:"min=0"`
 }
 
 // Validate validates
@@ -21,7 +21,7 @@ func (entry StatsEntry) Validate() error {
 
 // WriteStats writes the stats
 func WriteStats(firestoreClient *firestore.Client, quiz Quiz, result Result) error {
-	entry := getEntryForResult(quiz, result)
+	entry := GetStatsEntryForResult(quiz, result)
 	docRef := firestoreClient.Collection("stats_entry_abcd").NewDoc()
 	_, err := docRef.Create(context.Background(), entry)
 	if err != nil {
@@ -51,9 +51,10 @@ func GetAllStatsEntries() ([]StatsEntry, error) {
 	return results, nil
 }
 
-func getEntryForResult(quiz Quiz, result Result) StatsEntry {
-	TotalCount := uint(len(quiz.Questions))
-	CorrectCount := uint(0)
+// GetStatsEntryForResult gets stats for result
+func GetStatsEntryForResult(quiz Quiz, result Result) StatsEntry {
+	TotalCount := len(quiz.Questions)
+	CorrectCount := 0
 
 	for i, question := range quiz.Questions {
 		if i >= len(result.Answers) {

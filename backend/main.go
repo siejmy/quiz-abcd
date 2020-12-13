@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"cloud.google.com/go/firestore"
@@ -39,7 +40,7 @@ func main() {
     staticFileServer := http.FileServer(http.Dir("./static"))
     http.Handle(staticRoute, http.StripPrefix(staticRoute, staticFileServer))
 
-    http.HandleFunc(getRoute("quiz"), handleQuiz)
+    http.HandleFunc(fmt.Sprintf("/%s/", routeBase), handleQuiz)
     http.HandleFunc(getRoute("save"), handleSave)
     http.HandleFunc(getRoute("result"), handleResult)
 
@@ -76,9 +77,38 @@ func handleQuiz(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleResult(w http.ResponseWriter, r *http.Request) {
+    pathParts := removeEmptyFromArray(strings.Split(r.URL.Path, "/"))
+    if(len(pathParts) < 1) {
+        w.WriteHeader(http.StatusInternalServerError)
+        fmt.Fprintf(w, "Invalid url")
+        return
+    }
+    id := pathParts[len(pathParts) - 1]
+    result, err := resultRepository.GetByID(id)
+    if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        fmt.Fprintf(w, "Cannot get result: %v", err)
+        return
+    }
+
+    statsSummary, err := GetStatsSummary()
+    if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        fmt.Fprintf(w, "Cannot get statistics: %v", err)
+        return
+    }
+
+    statsEntry := GetStatsEntryForResult(quiz, result)
+
     templateData := make(map[string]interface{})
     appendDefaultTemplateData(&templateData)
-    templateData["path"] = r.URL.Path
+    templateData["id"] = id
+    templateData["result"] = result
+    templateData["resultMarshalled"] = marshallToString(result)
+    templateData["statsEntry"] = statsEntry
+    templateData["statsEntryMarshalled"] = marshallToString(statsEntry)
+    templateData["statsSummary"] = statsSummary
+    templateData["statsSummaryMarshalled"] = marshallToString(statsSummary)
     respondWithTemplate(w, "result.html", templateData)
 }
 
@@ -105,6 +135,13 @@ func handleSave(w http.ResponseWriter, r *http.Request) {
     if err != nil {
         w.WriteHeader(http.StatusInternalServerError)
         fmt.Fprintf(w, "Cannot save to DB: %v", err)
+        return
+    }
+
+    err = WriteStats(firestoreClient, quiz, result)
+    if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        fmt.Fprintf(w, "Cannot save stats to DB: %v", err)
         return
     }
 

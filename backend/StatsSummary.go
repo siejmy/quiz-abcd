@@ -8,9 +8,9 @@ import (
 // StatsSummary is summary of stats
 type StatsSummary struct {
 	UpdatedTime time.Time
-	SampleCount uint
-  DecileHistogram []uint
-  AveragePercent uint
+	SampleCount int
+  DecileHistogram []int
+	AveragePercent int
 }
 
 var statsSummaryCached = StatsSummary{}
@@ -34,20 +34,25 @@ func ReloadStatsSummaryCache() error {
 }
 
 func updateStatsSummary(summary *StatsSummary) error {
+	log.Println("Updating stats summary")
 	statsEntries, err := GetAllStatsEntries()
 	if err != nil {
+		log.Printf("Updating stats summary failed: %v", err)
 		return err
 	}
 
 	summary.UpdatedTime = time.Now()
 	summary.DecileHistogram = getDecilehistogramForEntries(statsEntries)
 	summary.AveragePercent = getAveragePercentForEntries(statsEntries)
+	summary.SampleCount = len(statsEntries)
+
+	log.Printf("Done updating stats summary: %+v", summary)
 	return nil
 }
 
 
-func getDecilehistogramForEntries(entries []StatsEntry) []uint {
-	decileHistogram := []uint{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+func getDecilehistogramForEntries(entries []StatsEntry) []int {
+	decileHistogram := []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	for _, entry := range entries {
 		decile := 10 * entry.CorrectCount / entry.TotalCount
     decileHistogram[decile]++
@@ -55,10 +60,14 @@ func getDecilehistogramForEntries(entries []StatsEntry) []uint {
   return decileHistogram
 }
 
-func getAveragePercentForEntries(entries []StatsEntry) uint {
-	totalSum := uint(0)
+func getAveragePercentForEntries(entries []StatsEntry) int {
+	if len(entries) == 0 {
+		return 0
+	}
+
+	totalSum := 0
 	for _, entry := range entries {
 		totalSum += 100 * entry.CorrectCount / entry.TotalCount
 	}
-  return totalSum / uint(len(entries))
+  return totalSum / len(entries)
 }
