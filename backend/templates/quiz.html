@@ -21,6 +21,7 @@
   document.addEventListener("DOMContentLoaded", function () {
     quiz.mountQuiz("#quiz-app", {
       title: "{{ .quiz.Title }}",
+      saveUrl: "{{ .routeBase }}/save",
       reCaptchaKey: "{{ .env.RE_CAPTCHA_KEY }}",
       facebookAppId: "{{ .env.FACEBOOK_APP_ID }}",
       quiz: quizConfig,

@@ -1,6 +1,3 @@
 export * from './QuizABCD'
-export * from './Result'
 export * from './Quiz'
-export * from './Stats'
-export * from './ResultABCDDenormed'
-export * from './makeDenormedResultQuizABCD'
+export * from './ResultABCD'

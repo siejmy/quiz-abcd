@@ -1,6 +1,5 @@
 // tslint:disable trailing-comma
-import { QuizABCD, StatsEntry } from '@/domain'
-import { v4 as uuid } from 'uuid'
+import { QuizABCD } from '@/domain'
 import { assign, Interpreter, Machine } from 'xstate'
 
 export interface Schema {
@@ -40,8 +39,8 @@ export type Events =
 
 export interface Context {
   quiz: QuizABCD
-  resultData: { id: string; answers: number[]; name: string }
-  stats?: StatsEntry
+  resultData: { answers: number[]; name: string }
+  resultUrl: string
   currentQuestionNo: number
 }
 
@@ -55,10 +54,10 @@ export const initialContext: Context = {
     questions: [],
   },
   resultData: {
-    id: uuid(),
     name: '',
     answers: [],
   },
+  resultUrl: '',
   currentQuestionNo: 0,
 }
 
@@ -69,7 +68,6 @@ export const abcdQuizMachine = Machine<Context, Schema, Events>(
     context: initialContext,
     states: {
       Intro: {
-        entry: ['initializeStats'],
         on: {
           NEXT: 'Question',
         },
@@ -91,7 +89,7 @@ export const abcdQuizMachine = Machine<Context, Schema, Events>(
             },
           },
           AnswerCorrect: {
-            entry: ['markAnswer', 'markCorrectAnswer'],
+            entry: ['markAnswer'],
             on: {
               NEXT: [
                 {
@@ -106,7 +104,7 @@ export const abcdQuizMachine = Machine<Context, Schema, Events>(
             },
           },
           AnswerIncorrect: {
-            entry: ['markAnswer', 'markIncorrectAnswer'],
+            entry: ['markAnswer'],
             on: {
               NEXT: [
                 {
@@ -153,7 +151,7 @@ export const abcdQuizMachine = Machine<Context, Schema, Events>(
       SavingResults: {
         invoke: {
           src: 'saveResults',
-          onDone: 'RedirectToSuccessPage',
+          onDone: { target: 'RedirectToSuccessPage', actions: 'saveResultUrl' },
           onError: { target: 'Error', actions: 'logError' },
         },
       },
@@ -176,13 +174,6 @@ export const abcdQuizMachine = Machine<Context, Schema, Events>(
   {
     actions: {
       logError: (_, { data }: any) => console.error(new Error(data)),
-      initializeStats: assign({
-        stats: ctx => ({
-          quizId: ctx.quiz.id,
-          correctCount: 0,
-          totalCount: 0,
-        }),
-      }),
       nextQuestion: assign({
         currentQuestionNo: ctx => ctx.currentQuestionNo + 1,
       }),
@@ -192,18 +183,8 @@ export const abcdQuizMachine = Machine<Context, Schema, Events>(
           answers: [...ctx.resultData.answers, (evt as any).no],
         }),
       }),
-      markCorrectAnswer: assign({
-        stats: ctx => ({
-          ...ctx.stats!,
-          correctCount: ctx.stats!.correctCount + 1,
-          totalCount: ctx.stats!.totalCount + 1,
-        }),
-      }),
-      markIncorrectAnswer: assign({
-        stats: ctx => ({
-          ...ctx.stats!,
-          totalCount: ctx.stats!.totalCount + 1,
-        }),
+      saveResultUrl: assign({
+        resultUrl: (_, { data }: any) => data.url,
       }),
     },
     guards: {

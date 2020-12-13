@@ -37,7 +37,8 @@
 <script lang="ts">
 import { Error, Loading, StateMatches } from '@/components'
 import { QuizABCD } from '@/domain'
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { ResultsRepositoryAjax } from '@/services'
+import { Component, Inject, Prop, Vue } from 'vue-property-decorator'
 
 import {
   ABCDQuizIntro,
@@ -68,13 +69,17 @@ export default class extends Vue {
   @Prop({ required: true, type: Object })
   public quiz!: QuizABCD
 
-  public interpreter: ABCDQuizInterpreter = interpretMachine({
-    quizUrl: this.quizUrl,
-    quiz: this.quiz,
-  })
-  public state: ABCDQuizInterpreter['state'] = this.interpreter.initialState
+  public interpreter!: ABCDQuizInterpreter
+  public state!: ABCDQuizInterpreter['state']
+  @Inject()
+  private resultRepository!: ResultsRepositoryAjax
 
   public created() {
+    this.interpreter = interpretMachine({
+      resultRepository: this.resultRepository,
+      quiz: this.quiz,
+    })
+    this.state = this.interpreter.initialState
     this.startMachine()
   }
 

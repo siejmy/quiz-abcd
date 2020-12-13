@@ -1,17 +1,14 @@
-import { makeDenormedResultQuizABCD, QuizABCD } from '@/domain'
-import {
-  resultsRepositoryFirestore,
-  statsEntryRepositoryFirestore,
-} from '@/services'
+import { QuizABCD } from '@/domain'
+import { ResultsRepositoryAjax } from '@/services'
 import { interpret } from 'xstate'
 
 import { ABCDQuizInterpreter, abcdQuizMachine, initialContext } from './machine'
 
 export function interpretMachine({
-  quizUrl,
+  resultRepository,
   quiz,
 }: {
-  quizUrl: string
+  resultRepository: ResultsRepositoryAjax
   quiz: QuizABCD
 }): ABCDQuizInterpreter {
   return interpret(
@@ -19,16 +16,7 @@ export function interpretMachine({
       .withConfig({
         services: {
           saveResults: async ctx => {
-            await statsEntryRepositoryFirestore.saveStatsEntry(ctx.stats!)
-            const statsEntries = await statsEntryRepositoryFirestore //
-              .getAllEntriesForQuiz(ctx.quiz.id)
-            const result = makeDenormedResultQuizABCD(
-              ctx.resultData,
-              quizUrl,
-              ctx.stats!,
-              statsEntries,
-            )
-            await resultsRepositoryFirestore.saveResult(result)
+            return resultRepository.saveResult(ctx.resultData)
           },
         },
       })

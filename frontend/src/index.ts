@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import App from './App.vue'
 import { Configuration, validateConfiguration } from './Configuration'
 import { QuizPage } from './features/quiz'
+import { ResultsRepositoryAjax } from './services'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
@@ -22,6 +23,9 @@ export function mountQuiz(tag: string, config: Configuration) {
       mode: 'hash',
       routes,
     }),
+    provide: {
+      resultRepository: new ResultsRepositoryAjax(config.saveUrl),
+    },
     data: {
       config,
     },

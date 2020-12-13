@@ -17,12 +17,12 @@ export default class extends Vue {
   @Prop({ required: true })
   public state!: ABCDQuizInterpreter['state']
 
-  get resultsId(): string {
-    return this.state.context.resultData.id
+  get resultUrl(): string {
+    return this.state.context.resultUrl
   }
 
   public mounted() {
-    window.location.href = '/quizabcd-result/' + this.resultsId
+    window.location.href = this.resultUrl
   }
 }
 </script>
