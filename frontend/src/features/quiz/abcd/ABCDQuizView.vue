@@ -35,6 +35,7 @@
 </template>
 
 <script lang="ts">
+// tslint:disable member-ordering
 import { Error, Loading, StateMatches } from '@/components'
 import { QuizABCD } from '@/domain'
 import { ResultsRepositoryAjax } from '@/services'
@@ -69,17 +70,16 @@ export default class extends Vue {
   @Prop({ required: true, type: Object })
   public quiz!: QuizABCD
 
-  public interpreter!: ABCDQuizInterpreter
-  public state!: ABCDQuizInterpreter['state']
   @Inject()
   private resultRepository!: ResultsRepositoryAjax
 
+  public interpreter: ABCDQuizInterpreter = interpretMachine({
+    resultRepository: this.resultRepository!,
+    quiz: this.quiz,
+  })
+  public state: ABCDQuizInterpreter['state'] = this.interpreter.initialState
+
   public created() {
-    this.interpreter = interpretMachine({
-      resultRepository: this.resultRepository,
-      quiz: this.quiz,
-    })
-    this.state = this.interpreter.initialState
     this.startMachine()
   }
 
