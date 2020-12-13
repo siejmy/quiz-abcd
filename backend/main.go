@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
@@ -22,11 +21,14 @@ var staticRoute = getRoute("static")
 var firebaseClient = initializeFirebase()
 var firestoreClient = initializeFirestore()
 var quiz = LoadQuiz()
+var env = make(map[string]interface{})
 
 func main() {
         log.Print("abcd: starting server...")
         log.Printf("routeBase='%s', staticRoute='%s'", routeBase, staticRoute)
 
+        env["FACEBOOK_APP_ID"] = os.Getenv("FACEBOOK_APP_ID")
+        env["RE_CAPTCHA_KEY"] = os.Getenv("RE_CAPTCHA_KEY")
 
         staticFileServer := http.FileServer(http.Dir("./static"))
         http.Handle(staticRoute, http.StripPrefix(staticRoute, staticFileServer))
@@ -76,7 +78,8 @@ func templatedRouteFactory(templateFile string) func(w http.ResponseWriter, r *h
                 templateData["routeBase"] = routeBase
                 templateData["staticRoute"] = staticRoute
                 templateData["quiz"] = quiz
-                templateData["quizJson"], _ = json.Marshal(quiz)
+                templateData["env"] = env
+                templateData["quizJson"] = marshallToString(quiz)
                 tmpl.ExecuteTemplate(w, "layout", templateData)
         }
 }
