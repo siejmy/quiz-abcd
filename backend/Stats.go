@@ -52,8 +52,8 @@ func GetAllStatsEntries() ([]StatsEntry, error) {
 }
 
 func getEntryForResult(quiz Quiz, result Result) StatsEntry {
-	TotalCount := uint8(len(quiz.Questions))
-	CorrectCount := uint8(0)
+	TotalCount := uint(len(quiz.Questions))
+	CorrectCount := uint(0)
 
 	for i, question := range quiz.Questions {
 		if i >= len(result.Answers) {

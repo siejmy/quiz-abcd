@@ -18,92 +18,68 @@ import (
 
 var routeBase = os.Getenv("ROUTE_BASE")
 func getRoute(subroute string) string {
-        return fmt.Sprintf("/%s/%s/", routeBase, subroute)
+    return fmt.Sprintf("/%s/%s/", routeBase, subroute)
 }
 var staticRoute = getRoute("static")
 var firebaseClient = initializeFirebase()
 var firestoreClient = initializeFirestore()
 var quiz = LoadQuiz()
 var resultRepository = ResultRepositoryFirestore{
-        firestoreClient,
+    firestoreClient,
 }
 var env = make(map[string]interface{})
 
 func main() {
-        log.Print("abcd: starting server...")
-        log.Printf("routeBase='%s', staticRoute='%s'", routeBase, staticRoute)
+    log.Print("abcd: starting server...")
+    log.Printf("routeBase='%s', staticRoute='%s'", routeBase, staticRoute)
 
-        env["FACEBOOK_APP_ID"] = os.Getenv("FACEBOOK_APP_ID")
-        env["RE_CAPTCHA_KEY"] = os.Getenv("RE_CAPTCHA_KEY")
+    env["FACEBOOK_APP_ID"] = os.Getenv("FACEBOOK_APP_ID")
+    env["RE_CAPTCHA_KEY"] = os.Getenv("RE_CAPTCHA_KEY")
 
-        staticFileServer := http.FileServer(http.Dir("./static"))
-        http.Handle(staticRoute, http.StripPrefix(staticRoute, staticFileServer))
+    staticFileServer := http.FileServer(http.Dir("./static"))
+    http.Handle(staticRoute, http.StripPrefix(staticRoute, staticFileServer))
 
-        http.HandleFunc(getRoute("quiz"), templatedRouteFactory("quiz.html"))
-        http.HandleFunc(getRoute("save"), handleSave)
-        http.HandleFunc(getRoute("result"), templatedRouteFactory("result.html"))
+    http.HandleFunc(getRoute("quiz"), handleQuiz)
+    http.HandleFunc(getRoute("save"), handleSave)
+    http.HandleFunc(getRoute("result"), handleResult)
 
-        http.HandleFunc(getRoute("demo"), serveFirestore)
+    port := os.Getenv("PORT")
+    if port == "" {
+        port = "8080"
+    }
 
-        port := os.Getenv("PORT")
-        if port == "" {
-                port = "8080"
-        }
-
-        log.Printf("abcd: listening on port %s", port)
-        log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
+    log.Printf("abcd: listening on port %s", port)
+    log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }
 
 func initializeFirebase() *firebase.App {
-        app, err := firebase.NewApp(context.Background(), nil)
-        if err != nil {
-                log.Fatalf("error initializing app: %v\n", err)
-        }
+    app, err := firebase.NewApp(context.Background(), nil)
+    if err != nil {
+        log.Fatalf("error initializing app: %v\n", err)
+    }
 
-        return app
+    return app
 }
 
 func initializeFirestore() *firestore.Client {
-        client, err := firebaseClient.Firestore(context.Background())
-        if err != nil {
-                log.Fatalf("error initializing firestore: %v\n", err)
-        }
-        return client
+    client, err := firebaseClient.Firestore(context.Background())
+    if err != nil {
+        log.Fatalf("error initializing firestore: %v\n", err)
+    }
+    return client
 }
 
-func templatedRouteFactory(templateFile string) func(w http.ResponseWriter, r *http.Request) {
-        return func (w http.ResponseWriter, r *http.Request) {
-                lp := filepath.Join("templates", "layout.html")
-                fp := filepath.Join("templates", templateFile)
-
-                tmpl, err := template.ParseFiles(lp, fp)
-                if err != nil {
-                        fmt.Fprintf(w, "Error: %v", err)
-                        return
-                }
-                templateData := make(map[string]interface{})
-                templateData["routeBase"] = routeBase
-                templateData["staticRoute"] = staticRoute
-                templateData["quiz"] = quiz
-                templateData["env"] = env
-                templateData["quizJson"] = marshallToString(quiz)
-                tmpl.ExecuteTemplate(w, "layout", templateData)
-        }
+func handleQuiz(w http.ResponseWriter, r *http.Request) {
+    templateData := make(map[string]interface{})
+    appendDefaultTemplateData(&templateData)
+    respondWithTemplate(w, "quiz.html", templateData)
 }
 
-func serveFirestore(w http.ResponseWriter, r *http.Request) {
-        doc := firestoreClient.Doc("firestore_demo/demo")
-        snapshot, err := doc.Get(context.Background())
-        if err != nil {
-                fmt.Fprintf(w, "Error: %v", err)
-                return
-        }
-        if snapshot.Exists() != true {
-                fmt.Fprintf(w, "Document doesnt exist")
-                return
-        }
-        data := snapshot.Data()
-        fmt.Fprintf(w, "Data: %+v", data)
+func handleResult(w http.ResponseWriter, r *http.Request) {
+    templateData := make(map[string]interface{})
+    appendDefaultTemplateData(&templateData)
+    templateData["path"] = r.URL.Path
+    respondWithTemplate(w, "result.html", templateData)
 }
 
 func handleSave(w http.ResponseWriter, r *http.Request) {
@@ -136,4 +112,24 @@ func handleSave(w http.ResponseWriter, r *http.Request) {
     response["id"] = id
     response["url"] = fmt.Sprintf("/%s/result/%s/", routeBase, id)
     fmt.Fprintf(w, "%s", marshallToString(response))
+}
+
+func respondWithTemplate(w http.ResponseWriter, templateFile string, templateData map[string]interface{}) {
+    lp := filepath.Join("templates", "layout.html")
+    fp := filepath.Join("templates", templateFile)
+
+    tmpl, err := template.ParseFiles(lp, fp)
+    if err != nil {
+        fmt.Fprintf(w, "Error: %v", err)
+        return
+    }
+    tmpl.ExecuteTemplate(w, "layout", templateData)
+}
+
+func appendDefaultTemplateData(templateData *map[string]interface{}) {
+    (*templateData)["routeBase"] = routeBase
+    (*templateData)["staticRoute"] = staticRoute
+    (*templateData)["quiz"] = quiz
+    (*templateData)["env"] = env
+    (*templateData)["quizJson"] = marshallToString(quiz)
 }
