@@ -28,4 +28,5 @@ ADD serviceAccount.json /serviceAccount_o5z3A5q1.json
 ENV ROUTE_BASE="abcd"
 ENV GOOGLE_APPLICATION_CREDENTIALS="/serviceAccount_o5z3A5q1.json"
 COPY demo .
+RUN ls static
 CMD ["/app/server"]

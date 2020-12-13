@@ -16,7 +16,7 @@ import (
 
 var routeBase = os.Getenv("ROUTE_BASE")
 func getRoute(subroute string) string {
-        return fmt.Sprintf("/%s/%s", routeBase, subroute)
+        return fmt.Sprintf("/%s/%s/", routeBase, subroute)
 }
 var staticRoute = getRoute("static")
 var firebaseClient = initializeFirebase()
@@ -28,10 +28,10 @@ func main() {
         log.Printf("routeBase='%s', staticRoute='%s'", routeBase, staticRoute)
 
 
-        fs := http.FileServer(http.Dir("./static"))
-        http.Handle(staticRoute, http.StripPrefix(staticRoute, fs))
+        staticFileServer := http.FileServer(http.Dir("./static"))
+        http.Handle(staticRoute, http.StripPrefix(staticRoute, staticFileServer))
 
-        http.HandleFunc(getRoute(""), templatedRouteFactory("quiz.html"))
+        http.HandleFunc(getRoute("quiz"), templatedRouteFactory("quiz.html"))
         http.HandleFunc(getRoute("result"), templatedRouteFactory("result.html"))
 
         http.HandleFunc(getRoute("demo"), serveFirestore)
@@ -65,7 +65,7 @@ func initializeFirestore() *firestore.Client {
 func templatedRouteFactory(templateFile string) func(w http.ResponseWriter, r *http.Request) {
         return func (w http.ResponseWriter, r *http.Request) {
                 lp := filepath.Join("templates", "layout.html")
-                fp := filepath.Join("templates", "home.html")
+                fp := filepath.Join("templates", templateFile)
 
                 tmpl, err := template.ParseFiles(lp, fp)
                 if err != nil {

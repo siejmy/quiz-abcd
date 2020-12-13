@@ -14,7 +14,7 @@ type Quiz struct {
   Title string `json:"title"`
   IntroHTML string `json:"introHtml"`
   IntroImageURL string `json:"introImageUrl"`
-  Questions QuizABCDQuestion `json:"questions"`
+  Questions []QuizABCDQuestion `json:"questions"`
 }
 
 // QuizABCDQuestion is a question type
