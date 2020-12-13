@@ -23,6 +23,9 @@ var staticRoute = getRoute("static")
 var firebaseClient = initializeFirebase()
 var firestoreClient = initializeFirestore()
 var quiz = LoadQuiz()
+var resultRepository = ResultRepositoryFirestore{
+        firestoreClient,
+}
 var env = make(map[string]interface{})
 
 func main() {
@@ -103,21 +106,30 @@ func serveFirestore(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleSave(w http.ResponseWriter, r *http.Request) {
-    decoder := json.NewDecoder(r.Body)
     id := uuid.New().String()
     var result Result
-    err := decoder.Decode(&result)
+    err := json.NewDecoder(r.Body).Decode(&result)
     if err != nil {
         w.WriteHeader(http.StatusInternalServerError)
-        fmt.Fprintf(w, "Parse error: %v", err)
+        fmt.Fprintf(w, "POST parse error: %+v, parsed: %+v", err, result)
+        return
     }
     err = result.Validate()
     if err != nil {
         w.WriteHeader(http.StatusInternalServerError)
         fmt.Fprintf(w, "Validation failed: %v", err)
+        return
     }
+
+    err = resultRepository.Save(id, result)
+    if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        fmt.Fprintf(w, "Cannot save to DB: %v", err)
+        return
+    }
+
     response := make(map[string]interface{})
     response["id"] = id
-    response["url"] = getRoute(fmt.Sprintf("result/%s", id))
+    response["url"] = fmt.Sprintf("/%s/result/%s/", routeBase, id)
     fmt.Fprintf(w, "%s", marshallToString(response))
 }

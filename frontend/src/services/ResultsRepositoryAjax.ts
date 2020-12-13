@@ -1,3 +1,4 @@
+// tslint:disable object-literal-key-quotes
 import { ResultABCD, validateResultABCD } from '@/domain'
 import ow from 'ow'
 export class ResultsRepositoryAjax {
@@ -9,13 +10,16 @@ export class ResultsRepositoryAjax {
     validateResultABCD(r)
     const response = await fetch(this.saveUrl, {
       method: 'POST',
-      cache: 'no-cache',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(r),
     })
     const responseData = await response.json()
     ow(responseData, 'responseData', ow.object)
     ow(responseData.id, 'responseData.id', ow.string.nonEmpty)
-    ow(responseData.url, 'responseData.url', ow.string.nonEmpty.url)
+    ow(responseData.url, 'responseData.url', ow.string.nonEmpty)
     return responseData
   }
 }
