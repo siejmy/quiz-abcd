@@ -11,38 +11,40 @@
 />
 {{end}}
 
+<!-- BODY CLASS -->
+{{define "bodyclass"}}result{{end}}
+
 <!--      BODY         -->
 {{define "body"}}
-<header>
-  <p class="back"><a href="https://siejmy.pl">⏎ Wróć do Siejmy</a></p>
-  <h1>
-    <img
-      src="{{ .staticRoute }}assets/siejmy-logo-icon.svg"
-      alt="Ikona siejmy"
-    />
-    <span>SIEJMY</span>
-  </h1>
-</header>
-
-<div class="line-hero">
-  <div>
-    <div>
-      <img src="{{ .quiz.IntroImageURL }}" alt="{{ .quiz.Title }}" />
-    </div>
-    <div>
-      <h2>
-        Gratulacje{{- if .result.Name -}}
-        <strong>{{- .result.Name -}}</strong>, {{- else -}},{{- end -}}
-        <br />
-        Twój wynik, to:
-      </h2>
-      <h2>{{ .resultPercent }}%</h2>
+<div class="bg-siejmy result-hero">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-6 col-quiz">
+        <img src="{{ .quiz.IntroImageURL }}" alt="{{ .quiz.Title }}" />
+        <h2 class="quiz-title">{{ .quiz.Title }}</h2>
+      </div>
+      <div class="col-12 col-sm-6 col-result">
+        <h2>
+          Gratulacje{{- if .result.Name -}}
+          <strong>{{- .result.Name -}}</strong>, {{- else -}},{{- end -}}
+          <br />
+          <span>Twój wynik, to:</span>
+        </h2>
+        <h3>{{ .resultPercent }}%</h3>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="line-solve-btn">
-  <a href="/{{ .routeBase }}/">Rozwiąż ten quiz</a>
+<div class="container">
+  <div class="row">
+    <div class="col-8 col-sm-6 text-center">
+      <a class="btn btn-lg btn-default" href="/{{ .routeBase }}/"
+        >Rozwiąż ten quiz</a
+      >
+    </div>
+    <div class="col-4 col-sm-6">&nbsp;</div>
+  </div>
 </div>
 
 <div class="line-questions">

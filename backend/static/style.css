@@ -14,49 +14,76 @@ body {
   color: var(--text-color);
   font-family: "Lato", Helvetica, Arial, sans-serif;
   font-weight: 300;
+}
+
+body.quiz {
   margin: 0 auto !important;
   max-width: 960px !important;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
 
-.header {
+header {
   margin: 0 auto;
   margin-top: 2rem;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
   width: fit-content;
   height: 120px;
 }
 
-.header a {
+header.quiz {
+  margin-bottom: 4rem;
+}
+
+header a {
   text-decoration: none;
   color: #888;
 }
 
-.header .logo {
+.back-to-siejmy {
+  position: absolute;
+  left: 0.5rem;
+  top: 1.5rem;
+  padding: 0.25rem;
+  margin: 0;
+}
+
+.back-to-siejmy a {
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  text-decoration: underline;
+  color: #aaa;
+}
+
+.back-to-siejmy a:hover {
+  text-decoration: none;
+}
+
+header .logo {
   height: auto;
   width: auto; /* makes the div same size as content */
   float: left;
 }
 
-.header .logo img {
+header .logo img {
   height: 120px;
 }
 
-.header .title {
+header .title {
   width: auto; /* makes the div same size as content */
   float: left;
   height: 120px;
 }
 
-.header .title p {
+header .title p {
   line-height: 120px;
   font-size: 3.2rem;
   margin: 0;
   padding-left: 1rem;
 }
 
-.header .title p span {
+header .title p span {
   font-size: 40%;
   margin-left: -1.4rem;
   float: right;
@@ -171,5 +198,74 @@ body {
   }
   to {
     opacity: 1;
+  }
+}
+
+/****** RESULTS **********/
+.bg-siejmy {
+  background: var(--main-color);
+  color: white;
+}
+
+.result-hero {
+  margin-bottom: 3rem;
+}
+
+.result-hero .col-quiz {
+  position: relative;
+}
+
+.result-hero .col-quiz img {
+  max-width: 100%;
+  transform: rotate(-10deg);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.result-hero .col-quiz h2 {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  max-width: 100%;
+  font-size: 8rem;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-weight: 900;
+}
+
+@media (max-width: 992px) {
+  .result-hero .col-quiz h2 {
+    font-size: 5rem;
+  }
+}
+
+.result-hero .col-result h2 {
+  font-weight: 300;
+  font-size: 4rem;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.result-hero .col-result h2 span {
+  font-size: 3rem;
+}
+
+.result-hero .col-result h3 {
+  line-height: 100%;
+  font-size: 20rem;
+  margin: 0;
+  text-shadow: 2px 4px 12px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+@media (max-width: 992px) {
+  .result-hero .col-result h2 {
+    font-size: 3rem;
+  }
+
+  .result-hero .col-result h2 span {
+    font-size: 1.5rem;
+  }
+
+  .result-hero .col-result h3 {
+    font-size: 12rem;
   }
 }

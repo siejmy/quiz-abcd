@@ -9,8 +9,11 @@
     {{template "head" .}}
     <link href="{{ .staticRoute }}style.css" rel="stylesheet" />
   </head>
-  <body>
-    <div class="header">
+  <body class="{{template "bodyclass" .}}">
+    <p class="back-to-siejmy">
+      <a href="https://siejmy.pl">⏎ Wróć do Siejmy</a>
+    </p>
+    <header>
       <a href="https://siejmy.pl">
         <div class="logo">
           <img
@@ -22,7 +25,7 @@
           <p>SIEJMY <span>quiz</span></p>
         </div>
       </a>
-    </div>
+    </header>
 
     {{template "body" .}}
 
