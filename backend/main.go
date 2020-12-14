@@ -103,7 +103,7 @@ func handleResult(w http.ResponseWriter, r *http.Request) {
     statsEntry := GetStatsEntryForResult(quiz, result)
     resultPercent := 100 * statsEntry.CorrectCount / statsEntry.TotalCount
     decileIndex := resultPercent / 10
-    decileValue := 5 // TODO
+    decileValue := getDecileValue(resultPercent, statsSummary)
 
     templateData := make(map[string]interface{})
     appendDefaultTemplateData(&templateData)
@@ -196,4 +196,13 @@ func getResultTitle(result Result, stats StatsEntry) string {
         return fmt.Sprintf("%s uzyskał %d%% w quizie %s — Siejmy QUIZ", result.Name, resultPercent, quiz.Title)
     }
     return fmt.Sprintf("%d%% w quizie %s — Siejmy QUIZ", resultPercent, quiz.Title)
+}
+
+func getDecileValue(resultPercent int, stats StatsSummary) int {
+    decileIndex := resultPercent / 10
+    noOfWorse := 0
+    for i := 0; i <= decileIndex;i++ {
+        noOfWorse += stats.DecileHistogram[i]
+    }
+    return 100 * noOfWorse / stats.SampleCount
 }
