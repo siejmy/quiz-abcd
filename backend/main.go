@@ -18,6 +18,7 @@ import (
 )
 
 var routeBase = os.Getenv("ROUTE_BASE")
+var domainName = os.Getenv("DOMAIN")
 func getRoute(subroute string) string {
     return fmt.Sprintf("/%s/%s/", routeBase, subroute)
 }
@@ -116,6 +117,7 @@ func handleResult(w http.ResponseWriter, r *http.Request) {
     templateData["decileIndex"] = decileIndex
     templateData["decileValue"] = decileValue
     templateData["year"] = time.Now().UTC().Year()
+    templateData["resultUrl"] = fmt.Sprintf("https://%s/%s/result/%s/", domainName, routeBase, id)
     respondWithTemplate(w, "result.html", templateData)
 }
 

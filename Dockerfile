@@ -26,6 +26,7 @@ COPY --from=builderbackend /app/ /app/
 COPY --from=builderfrontend /app/dist/ /app/static/frontend/
 ADD serviceAccount.json /serviceAccount_o5z3A5q1.json
 ENV ROUTE_BASE="abcd"
+ENV DOMAIN="localhost:8080"
 ENV GOOGLE_APPLICATION_CREDENTIALS="/serviceAccount_o5z3A5q1.json"
 ENV RE_CAPTCHA_KEY="6Le8g9wZAAAAAP4IGzG3h1eSg-59l3m9t59qrJ8M"
 ENV FACEBOOK_APP_ID="357764061986952"

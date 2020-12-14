@@ -95,7 +95,7 @@
 <div class="container">
   <div class="row">
     <p class="text-center">
-      <a class="btn btn-lg btn-siejmy" href="#">Udostępnij swój wynik</a
+      <button class="btn btn-lg btn-siejmy" onclick="shareOnFb()">Udostępnij swój wynik na Facebooku</
       ><!-- TODO -->
     </p>
   </div>
@@ -105,4 +105,23 @@
 
 <!-- TODO iframe numery siejmy -->
 
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId            : '{{ .env.FACEBOOK_APP_ID }}',
+      autoLogAppEvents : true,
+      xfbml            : true,
+      version          : 'v9.0'
+    });
+  };
+</script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/pl_PL/sdk.js"></script>
+<script>
+  function shareOnFb() {
+    FB.ui({
+      method: 'share',
+      href: '{{ .resultUrl }}',
+    }, function(response){});
+  }
+</script>
 {{end}}
