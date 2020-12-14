@@ -21,7 +21,7 @@
     <div class="row">
       <div class="col-12 col-sm-6 col-quiz">
         <img src="{{ .quiz.IntroImageURL }}" alt="{{ .quiz.Title }}" />
-        <h2 class="quiz-title">{{ .quiz.Title }}</h2>
+        <h2 class="quiz-title"><a href="/{{ .routeBase }}/">{{ .quiz.Title }}</a></h2>
       </div>
       <div class="col-12 col-sm-6 col-result">
         <h2>
@@ -35,7 +35,7 @@
     </div>
   </div>
 </div>
-
+<br /><br /><br />
 <div class="container">
   <div class="row">
     <div class="col-8 col-sm-6 text-center">
@@ -46,47 +46,59 @@
     <div class="col-4 col-sm-6">&nbsp;</div>
   </div>
 </div>
-
-<div class="line-questions">
-  <div>
-    <p>
-      Odpowiedziałeś prawidłowo na
-      <strong>{{ .statsEntry.CorrectCount }}</strong> spośród
-      <strong>{{ .statsEntry.TotalCount }}</strong> pytań
-    </p>
-  </div>
-  <div>
-    {{ if ne .statsEntry.CorrectCount 0 }}
-    <!-- -->
-    {{ range (seq .statsEntry.CorrectCount) }}
-    <div class="answerbox answerbox-correct"></div>
-    {{ end }} {{ end }}
-    <!-- -->
-    {{ $incorrectCnt := (sub .statsEntry.TotalCount .statsEntry.CorrectCount)}}
-    <!-- -->
-    {{ range (seq $incorrectCnt) }}
-    <div class="answerbox answerbox-incorrect"></div>
-    {{ end }}
-  </div>
-</div>
-
-<div class="line-histogram">
-  <div>
-    <p>
-      Uzyskałeś wynik lepszy niż <string>{{ .decileValue }}</string>%
-      uczestników
-    </p>
-  </div>
-  <div>
-    <div class="decilebox">
-      {{ range $index, $v := .statsSummary.DecileHistogram }} {{ $v }} {{ end }}
+<br /><br /><br />
+<div class="container">
+  <div class="row">
+    <div class="col-6 col-sm-6">
+      <p class="h3">
+        Odpowiedziałeś prawidłowo na
+        <strong>{{ .statsEntry.CorrectCount }}</strong> spośród
+        <strong>{{ .statsEntry.TotalCount }}</strong> pytań
+      </p>
+    </div>
+    <div class="col-6 col-sm-6">
+      <p class="h3">
+        {{ if ne .statsEntry.CorrectCount 0 }}
+        <!-- -->
+        {{ range (seq .statsEntry.CorrectCount) }}
+        <div class="answerbox answerbox-correct"></div>
+        {{ end }} {{ end }}
+        <!-- -->
+        {{ $incorrCnt := (sub .statsEntry.TotalCount .statsEntry.CorrectCount)}}
+        <!-- -->
+        {{ range (seq $incorrCnt) }}
+        <div class="answerbox answerbox-incorrect"></div>
+        {{ end }}
+      </p>
     </div>
   </div>
 </div>
-
-<div class="line-share-btn">
-  <a href="#">Udostępnij swój wynik</a
-  ><!-- TODO -->
+<br /><br />
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6">
+      <p class="h3">
+        Uzyskałeś wynik lepszy niż <string>{{ .decileValue }}</string>%
+        uczestników
+      </p>
+    </div>
+    <div class="col-sm-6 h3">
+      <div class="progress" style="height: 3rem;">
+        <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="{{ .decileValue }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ .decileValue }}%; font-size: 2rem;">
+          {{ .decileValue }}%
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br /><br />
+<div class="container">
+  <div class="row">
+    <p class="text-center">
+      <a class="btn btn-lg btn-siejmy" href="#">Udostępnij swój wynik</a
+      ><!-- TODO -->
+    </p>
+  </div>
 </div>
 
 <!-- TODO iframe inne quizy -->
