@@ -1,5 +1,5 @@
 <!--      TITLE        -->
-{{define "title"}}Wyniki {{.quiz.Title}}{{end}}
+{{define "title"}}{{ .title }}{{end}}
 
 <!--      HEAD         -->
 {{define "head"}}
@@ -9,6 +9,12 @@
   integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
   crossorigin="anonymous"
 />
+
+<meta property="og:url"                content="{{ .resultUrl }}" />
+<meta property="og:type"               content="article" />
+<meta property="og:title"              content="{{ .title }}" />
+<meta property="og:description"        content="{{ .quiz.MetaIntro }}" />
+<meta property="og:image"              content="{{ .quiz.IntroImageURL }}" />
 {{end}}
 
 <!-- BODY CLASS -->
@@ -95,9 +101,15 @@
 <div class="container">
   <div class="row">
     <p class="text-center">
-      <button class="btn btn-lg btn-siejmy" onclick="shareOnFb()">Udostępnij swój wynik na Facebooku</
-      ><!-- TODO -->
+      <button class="btn btn-lg btn-siejmy" onclick="shareOnFb()">Udostępnij swój wynik na Facebooku</button>
     </p>
+    <div class="fbshare-container">
+      <div class="fb-share-button"
+        data-href="{{ .resultUrl }}"
+        data-layout="button" data-size="large">
+        <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode .resultUrl }}&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Udostępnij</a>
+      </div>
+    </div>
   </div>
 </div>
 

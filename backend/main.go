@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -117,6 +118,7 @@ func handleResult(w http.ResponseWriter, r *http.Request) {
     templateData["decileIndex"] = decileIndex
     templateData["decileValue"] = decileValue
     templateData["year"] = time.Now().UTC().Year()
+    templateData["title"] = getResultTitle(result, statsEntry)
     templateData["resultUrl"] = fmt.Sprintf("https://%s/%s/result/%s/", domainName, routeBase, id)
     respondWithTemplate(w, "result.html", templateData)
 }
@@ -167,6 +169,7 @@ func respondWithTemplate(w http.ResponseWriter, templateFile string, templateDat
     templateWithFuncs := template.New("").Funcs(template.FuncMap{
         "seq": func(n int) []int { return make([]int, n) },
         "sub": func(a int, b int) int { return a - b },
+        "urlencode": func(decoded string) string { return url.QueryEscape((decoded)) },
     })
     tmpl, err := templateWithFuncs.ParseFiles(lp, fp)
     if err != nil {
@@ -185,4 +188,12 @@ func appendDefaultTemplateData(templateData *map[string]interface{}) {
     (*templateData)["quiz"] = quiz
     (*templateData)["env"] = env
     (*templateData)["quizJson"] = marshallToString(quiz)
+}
+
+func getResultTitle(result Result, stats StatsEntry) string {
+    resultPercent := 100 * stats.CorrectCount / stats.TotalCount
+    if len(result.Name) > 0 {
+        return fmt.Sprintf("%s uzyskał %d%% w quizie %s — Siejmy QUIZ", result.Name, resultPercent, quiz.Title)
+    }
+    return fmt.Sprintf("%d%% w quizie %s — Siejmy QUIZ", resultPercent, quiz.Title)
 }

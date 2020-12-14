@@ -305,3 +305,8 @@ footer {
 .answerbox-incorrect {
   background: #cb2f2f;
 }
+
+.fbshare-container {
+  margin: 0 auto;
+  width: fit-content;
+}

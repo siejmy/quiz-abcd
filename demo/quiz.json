@@ -3,6 +3,7 @@
   "title": "Sanktuaria w Polsce",
   "type": "abcd",
   "introHtml": "Czy potrafisz rozpoznać, który wizarunek Matki Przenajświętszej pochodzi z jakiego sanktuarium?",
+  "metaIntro": "Czy potrafisz rozpoznać, który wizarunek Matki Przenajświętszej pochodzi z jakiego sanktuarium?",
   "introImageUrl": "/abcd/static/demo/s3.jpg",
   "questions": [
     {
