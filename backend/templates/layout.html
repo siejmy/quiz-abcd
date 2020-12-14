@@ -26,6 +26,18 @@
 
     {{template "body" .}}
 
+    <footer>
+      Copyright © 2019 - {{ .year }} by
+      <a href="https://siejmy.pl/">Wydawnictwo Siejmy</a>. Projekt strony
+      internetowej:
+      <a href="https://jedrzej.lewandowski.doctor/">Jędrzej Lewandowski</a>.
+      Zobacz:
+      <a href="https://siejmy.pl/podziekowania-techniczne/">Podziękowania</a>,
+      <a href="https://siejmy.pl/polityka-prywatnosci/"
+        >Polityka prywatności i śledzenia</a
+      >
+    </footer>
+
     <script src="{{ .staticRoute }}consent.js"></script>
     <!-- Prayer: Gloria Patri, et Filio, et Spiritui Sancto, sicut erat in principio et nunc et semper et in saecula saeculorum. Amen. In te, Domine, speravi: non confundar in aeternum. -->
   </body>

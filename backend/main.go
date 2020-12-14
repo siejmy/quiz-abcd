@@ -99,6 +99,9 @@ func handleResult(w http.ResponseWriter, r *http.Request) {
     }
 
     statsEntry := GetStatsEntryForResult(quiz, result)
+    resultPercent := 100 * statsEntry.CorrectCount / statsEntry.TotalCount
+    decileIndex := resultPercent / 10
+    decileValue := 5 // TODO
 
     templateData := make(map[string]interface{})
     appendDefaultTemplateData(&templateData)
@@ -109,6 +112,11 @@ func handleResult(w http.ResponseWriter, r *http.Request) {
     templateData["statsEntryMarshalled"] = marshallToString(statsEntry)
     templateData["statsSummary"] = statsSummary
     templateData["statsSummaryMarshalled"] = marshallToString(statsSummary)
+    templateData["resultPercent"] = resultPercent
+    templateData["incorrectCount"] = statsEntry.TotalCount - statsEntry.CorrectCount
+    templateData["decileIndex"] = decileIndex
+    templateData["decileValue"] = decileValue
+    templateData["year"] = time.Now().Year
     respondWithTemplate(w, "result.html", templateData)
 }
 
