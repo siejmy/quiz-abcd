@@ -2,7 +2,14 @@
 {{define "title"}}Wyniki {{.quiz.Title}}{{end}}
 
 <!--      HEAD         -->
-{{define "head"}} {{end}}
+{{define "head"}}
+<link
+  rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+  integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+  crossorigin="anonymous"
+/>
+{{end}}
 
 <!--      BODY         -->
 {{define "body"}}
@@ -20,11 +27,13 @@
 <div class="line-hero">
   <div>
     <div>
-      <img src="{{ .quiz.introImageUrl }}" alt="{{ .quiz.title }}" />
+      <img src="{{ .quiz.IntroImageURL }}" alt="{{ .quiz.Title }}" />
     </div>
     <div>
       <h2>
-        Gratulacje <strong>{{ .result.name }}</strong><br />
+        Gratulacje{{- if .result.Name -}}
+        <strong>{{- .result.Name -}}</strong>, {{- else -}},{{- end -}}
+        <br />
         Twój wynik, to:
       </h2>
       <h2>{{ .resultPercent }}%</h2>
@@ -41,13 +50,19 @@
     <p>
       Odpowiedziałeś prawidłowo na
       <strong>{{ .statsEntry.CorrectCount }}</strong> spośród
-      <strong>{{ .statsEntry.TotalCount }}</strong>> pytań
+      <strong>{{ .statsEntry.TotalCount }}</strong> pytań
     </p>
   </div>
   <div>
-    {{ range $index, $num := (seq .statsEntry.CorrectCount) }}
+    {{ if ne .statsEntry.CorrectCount 0 }}
+    <!-- -->
+    {{ range (seq .statsEntry.CorrectCount) }}
     <div class="answerbox answerbox-correct"></div>
-    {{ end }} {{ range $index, $num := (seq {{ .statsEntry.incorrectCount }}) }}
+    {{ end }} {{ end }}
+    <!-- -->
+    {{ $incorrectCnt := (sub .statsEntry.TotalCount .statsEntry.CorrectCount)}}
+    <!-- -->
+    {{ range (seq $incorrectCnt) }}
     <div class="answerbox answerbox-incorrect"></div>
     {{ end }}
   </div>
@@ -64,7 +79,6 @@
     <div class="decilebox">
       {{ range $index, $v := .statsSummary.DecileHistogram }} {{ $v }} {{ end }}
     </div>
-    Index={{ .decileIndex }}
   </div>
 </div>
 

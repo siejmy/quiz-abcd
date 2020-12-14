@@ -113,10 +113,9 @@ func handleResult(w http.ResponseWriter, r *http.Request) {
     templateData["statsSummary"] = statsSummary
     templateData["statsSummaryMarshalled"] = marshallToString(statsSummary)
     templateData["resultPercent"] = resultPercent
-    templateData["incorrectCount"] = statsEntry.TotalCount - statsEntry.CorrectCount
     templateData["decileIndex"] = decileIndex
     templateData["decileValue"] = decileValue
-    templateData["year"] = time.Now().Year
+    templateData["year"] = time.Now().UTC().Year()
     respondWithTemplate(w, "result.html", templateData)
 }
 
@@ -163,12 +162,19 @@ func respondWithTemplate(w http.ResponseWriter, templateFile string, templateDat
     lp := filepath.Join("templates", "layout.html")
     fp := filepath.Join("templates", templateFile)
 
-    tmpl, err := template.ParseFiles(lp, fp)
+    templateWithFuncs := template.New("").Funcs(template.FuncMap{
+        "seq": func(n int) []int { return make([]int, n) },
+        "sub": func(a int, b int) int { return a - b },
+    })
+    tmpl, err := templateWithFuncs.ParseFiles(lp, fp)
     if err != nil {
         fmt.Fprintf(w, "Error: %v", err)
         return
     }
-    tmpl.ExecuteTemplate(w, "layout", templateData)
+    err = tmpl.ExecuteTemplate(w, "layout", templateData)
+    if err != nil {
+        log.Printf("Error while parsing template: %v", err)
+    }
 }
 
 func appendDefaultTemplateData(templateData *map[string]interface{}) {
