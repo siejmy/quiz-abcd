@@ -76,8 +76,7 @@
     <div class="col-8 col-sm-6 text-center">
       <a class="btn btn-lg btn-default" href="/{{ .routeBase }}/"
         >Rozwiąż ten quiz</a
-      ><br />
-      <button class="btn btn-sm btn-default" style="margin-top: 0.5rem;" onclick="shareQuizInMessenger()">Wyślij link na messengerze</button>
+      >
     </div>
     <div class="col-4 col-sm-6">&nbsp;</div>
   </div>
@@ -133,9 +132,6 @@
     <p class="text-center">
       <button class="btn btn-lg btn-siejmy" onclick="shareOnFb()">Udostępnij swój wynik na Facebooku</button>
     </p>
-    <p class="text-center">
-      <button class="btn btn-default" onclick="shareInMessenger()">Wyślij znajomemu na messengerze</button>
-    </p>
     <div class="fbshare-container">
       <div class="fb-share-button"
         data-href="{{ .resultUrl }}"
@@ -167,20 +163,6 @@
       method: 'share',
       href: '{{ .resultUrl }}',
     }, function(response){});
-  }
-
-  function shareInMessenger() {
-    FB.ui({
-      method: 'send',
-      link: '{{ .resultUrl }}',
-    });
-  }
-
-  function shareQuizInMessenger() {
-    FB.ui({
-      method: 'send',
-      link: '{{ .quizUrl }}',
-    });
   }
 </script>
 {{end}}
