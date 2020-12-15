@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -13,8 +12,6 @@ import (
 	"strings"
 	"time"
 
-	"cloud.google.com/go/firestore"
-	firebase "firebase.google.com/go/v4"
 	"github.com/google/uuid"
 )
 
@@ -24,12 +21,8 @@ func getRoute(subroute string) string {
     return fmt.Sprintf("/%s/%s/", routeBase, subroute)
 }
 var staticRoute = getRoute("static")
-var firebaseClient = initializeFirebase()
-var firestoreClient = initializeFirestore()
 var quiz = LoadQuiz()
-var resultRepository = ResultRepositoryFirestore{
-    firestoreClient,
-}
+var resultRepository = ResultRepositoryFirestore{}
 var env = make(map[string]interface{})
 
 func main() {
@@ -55,22 +48,6 @@ func main() {
     log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }
 
-func initializeFirebase() *firebase.App {
-    app, err := firebase.NewApp(context.Background(), nil)
-    if err != nil {
-        log.Fatalf("error initializing app: %v\n", err)
-    }
-
-    return app
-}
-
-func initializeFirestore() *firestore.Client {
-    client, err := firebaseClient.Firestore(context.Background())
-    if err != nil {
-        log.Fatalf("error initializing firestore: %v\n", err)
-    }
-    return client
-}
 
 func handleQuiz(w http.ResponseWriter, r *http.Request) {
     templateData := make(map[string]interface{})
@@ -149,7 +126,7 @@ func handleSave(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    err = WriteStats(firestoreClient, quiz, result)
+    err = WriteStats(quiz, result)
     if err != nil {
         w.WriteHeader(http.StatusInternalServerError)
         fmt.Fprintf(w, "Cannot save stats to DB: %v", err)

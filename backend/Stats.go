@@ -20,9 +20,9 @@ func (entry StatsEntry) Validate() error {
 }
 
 // WriteStats writes the stats
-func WriteStats(firestoreClient *firestore.Client, quiz Quiz, result Result) error {
+func WriteStats(quiz Quiz, result Result) error {
 	entry := GetStatsEntryForResult(quiz, result)
-	docRef := firestoreClient.Collection("stats_entry_abcd").NewDoc()
+	docRef := GetFirestoreCollectionRef("stats_entry_abcd").NewDoc()
 	_, err := docRef.Create(context.Background(), entry)
 	if err != nil {
 		return err
@@ -32,7 +32,7 @@ func WriteStats(firestoreClient *firestore.Client, quiz Quiz, result Result) err
 
 // GetAllStatsEntries returns all stats entries
 func GetAllStatsEntries() ([]StatsEntry, error) {
-	collRef := firestoreClient.Collection("stats_entry_abcd")
+	collRef := GetFirestoreCollectionRef("stats_entry_abcd")
 	snapshots, err := collRef.Documents(context.Background()).GetAll()
 	if err != nil {
 		return []StatsEntry{}, err
