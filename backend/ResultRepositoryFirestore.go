@@ -12,14 +12,14 @@ type ResultRepositoryFirestore struct {
 
 // Save saves result
 func (repo *ResultRepositoryFirestore) Save(ID string, result Result) error {
-	docRef := GetFirestoreCollectionRef("result_abcd").Doc(ID)
+	docRef := GetFirestoreCollectionRef("result").Doc(ID)
 	_, err := docRef.Create(context.Background(), result)
 	return err
 }
 
 // GetByID fetches by id
 func (repo *ResultRepositoryFirestore) GetByID(ID string) (Result, error) {
-	docRef := GetFirestoreCollectionRef("result_abcd").Doc(ID)
+	docRef := GetFirestoreCollectionRef("result").Doc(ID)
 	snapshot, err := docRef.Get(context.Background())
 	if err != nil {
 		return Result{}, err

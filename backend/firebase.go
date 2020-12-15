@@ -31,6 +31,6 @@ func initializeFirestore() *firestore.Client {
 
 // GetFirestoreCollectionRef returns ref to the collection relative to this quiz
 func GetFirestoreCollectionRef(name string) *firestore.CollectionRef {
-	collName := fmt.Sprintf("/quiz/%s/%s", quiz.ID, name)
+	collName := fmt.Sprintf("quiz_abcd/%s/%s", quiz.ID, name)
 	return firestoreClient.Collection(collName)
 }

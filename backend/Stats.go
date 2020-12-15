@@ -22,7 +22,7 @@ func (entry StatsEntry) Validate() error {
 // WriteStats writes the stats
 func WriteStats(quiz Quiz, result Result) error {
 	entry := GetStatsEntryForResult(quiz, result)
-	docRef := GetFirestoreCollectionRef("stats_entry_abcd").NewDoc()
+	docRef := GetFirestoreCollectionRef("stats_entry").NewDoc()
 	_, err := docRef.Create(context.Background(), entry)
 	if err != nil {
 		return err
@@ -32,7 +32,7 @@ func WriteStats(quiz Quiz, result Result) error {
 
 // GetAllStatsEntries returns all stats entries
 func GetAllStatsEntries() ([]StatsEntry, error) {
-	collRef := GetFirestoreCollectionRef("stats_entry_abcd")
+	collRef := GetFirestoreCollectionRef("stats_entry")
 	snapshots, err := collRef.Documents(context.Background()).GetAll()
 	if err != nil {
 		return []StatsEntry{}, err
