@@ -94,7 +94,6 @@ func handleResult(w http.ResponseWriter, r *http.Request) {
     templateData["resultPercent"] = resultPercent
     templateData["decileIndex"] = decileIndex
     templateData["decileValue"] = decileValue
-    templateData["year"] = time.Now().UTC().Year()
     templateData["title"] = getResultTitle(result, statsEntry)
     templateData["resultUrl"] = fmt.Sprintf("https://%s/%s/result/%s/", domainName, routeBase, id)
     respondWithTemplate(w, "result.html", templateData)
@@ -164,6 +163,7 @@ func appendDefaultTemplateData(templateData *map[string]interface{}) {
     (*templateData)["staticRoute"] = staticRoute
     (*templateData)["quiz"] = quiz
     (*templateData)["env"] = env
+    (*templateData)["year"] = time.Now().UTC().Year()
     (*templateData)["quizJson"] = marshallToString(quiz)
     (*templateData)["quizUrl"] = fmt.Sprintf("https://%s/%s/", domainName, routeBase)
     (*templateData)["domainName"] = domainName
