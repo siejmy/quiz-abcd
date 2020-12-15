@@ -13,7 +13,10 @@
 <meta property="og:type" content="website" />
 <meta property="og:title" content="{{.quiz.Title}} — Siejmy QUIZ" />
 <meta property="og:description" content="{{ .quiz.MetaIntro }}" />
-<meta property="og:image" content="{{ .quiz.IntroImageURL }}" />
+<meta
+  property="og:image"
+  content="{{ .baseUrlWithDomain }}{{ .quiz.IntroImageURL }}"
+/>
 <meta property="fb:app_id" content="{{ .env.FACEBOOK_APP_ID }}" />
 <script type="application/ld+json">
   {
@@ -36,6 +39,10 @@
         "datePublished": "{{ .quiz.DatePublishedISO }}",
         "dateModified": "{{ .quiz.DatePublishedISO }}",
         "description": "{{ .quiz.MetaIntro }}",
+        "primaryImageOfPage": {
+          "contentUrl": "{{ .baseUrlWithDomain }}{{ .quiz.IntroImageURL }}"
+        },
+        "image": "{{ .baseUrlWithDomain }}{{ .quiz.IntroImageURL }}",
         "inLanguage": "pl-PL",
         "potentialAction": [
           { "@type": "ReadAction", "target": ["{{ .quizUrl }}"] }

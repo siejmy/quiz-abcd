@@ -160,6 +160,7 @@ func respondWithTemplate(w http.ResponseWriter, templateFile string, templateDat
 
 func appendDefaultTemplateData(templateData *map[string]interface{}) {
     (*templateData)["routeBase"] = routeBase
+    (*templateData)["baseUrlWithDomain"] = fmt.Sprintf("https://%s/%s", domainName, routeBase)
     (*templateData)["staticRoute"] = staticRoute
     (*templateData)["quiz"] = quiz
     (*templateData)["env"] = env
