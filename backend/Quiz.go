@@ -15,7 +15,8 @@ type Quiz struct {
 	IntroHTML string `json:"introHtml"`
 	MetaIntro string `json:"metaIntro"`
   IntroImageURL string `json:"introImageUrl"`
-  Questions []QuizABCDQuestion `json:"questions"`
+	Questions []QuizABCDQuestion `json:"questions"`
+	DatePublishedISO string `json:"datePublishedISO"`
 }
 
 // QuizABCDQuestion is a question type

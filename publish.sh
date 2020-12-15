@@ -4,7 +4,7 @@ cd "${DIR}"
 set -e
 
 BASE_TAG="jedrzejlewandowski/siejmy-quiz-abcd"
-VERSION="2.1.0"
+VERSION="2.2.0"
 
 docker build -t "${BASE_TAG}" .
 docker tag "${BASE_TAG}" "${BASE_TAG}:latest"

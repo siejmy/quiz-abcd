@@ -188,6 +188,8 @@ func appendDefaultTemplateData(templateData *map[string]interface{}) {
     (*templateData)["quiz"] = quiz
     (*templateData)["env"] = env
     (*templateData)["quizJson"] = marshallToString(quiz)
+    (*templateData)["quizUrl"] = fmt.Sprintf("https://%s/%s/", domainName, routeBase)
+    (*templateData)["domainName"] = domainName
 }
 
 func getResultTitle(result Result, stats StatsEntry) string {

@@ -15,6 +15,31 @@
 <meta property="og:title"              content="{{ .title }}" />
 <meta property="og:description"        content="{{ .quiz.MetaIntro }}" />
 <meta property="og:image"              content="{{ .quiz.IntroImageURL }}" />
+<meta property="fb:app_id"              content="{{ .env.FACEBOOK_APP_ID }}" />
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://{{ .domainName }}/#website",
+        "url": "https://{{ .domainName }}/",
+        "name": "Siejmy QUIZ",
+        "description": "Quizy i gry katolickie",
+        "inLanguage": "pl-PL"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "{{ .quizUrl }}/#webpage",
+        "url": "{{ .quizUrl }}",
+        "name": "{{ .title }}",
+        "isPartOf": { "@id": "https://siejmy.pl/#website" },
+        "description": "Wyniki: {{ .quiz.MetaIntro }}",
+        "inLanguage": "pl-PL",
+      }
+    ]
+  }
+</script>
 {{end}}
 
 <!-- BODY CLASS -->
