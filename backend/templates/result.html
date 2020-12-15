@@ -14,7 +14,7 @@
 <meta property="og:type"               content="article" />
 <meta property="og:title"              content="{{ .title }}" />
 <meta property="og:description"        content="{{ .quiz.MetaIntro }}" />
-<meta property="og:image"              content="{{ .baseUrlWithDomain }}{{ .quiz.IntroImageURL }}" />
+<meta property="og:image"              content="{{ .shareImageUrl }}" />
 <meta property="fb:app_id"              content="{{ .env.FACEBOOK_APP_ID }}" />
 <script type="application/ld+json">
   {
@@ -34,9 +34,9 @@
         "url": "{{ .quizUrl }}",
         "name": "{{ .title }}",
         "primaryImageOfPage": {
-          "contentUrl": "{{ .baseUrlWithDomain }}{{ .quiz.IntroImageURL }}"
+          "contentUrl": "{{ .shareImageUrl }}"
         },
-        "image": "{{ .baseUrlWithDomain }}{{ .quiz.IntroImageURL }}",
+        "image": "{{ .shareImageUrl }}",
         "isPartOf": { "@id": "https://siejmy.pl/#website" },
         "description": "Wyniki. {{ .quiz.MetaIntro }}",
         "inLanguage": "pl-PL"

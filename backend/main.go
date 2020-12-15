@@ -167,13 +167,14 @@ func appendDefaultTemplateData(templateData *map[string]interface{}) {
     (*templateData)["year"] = time.Now().UTC().Year()
     (*templateData)["quizJson"] = marshallToString(quiz)
     (*templateData)["quizUrl"] = fmt.Sprintf("https://%s/%s/", domainName, routeBase)
+    (*templateData)["shareImageUrl"] = fmt.Sprintf("https://%s%s", domainName, quiz.IntroImageURL)
     (*templateData)["domainName"] = domainName
 }
 
 func getResultTitle(result Result, stats StatsEntry) string {
     resultPercent := 100 * stats.CorrectCount / stats.TotalCount
     if len(result.Name) > 0 {
-        return fmt.Sprintf("%s uzyskał %d%% w quizie %s — Siejmy QUIZ", result.Name, resultPercent, quiz.Title)
+        return fmt.Sprintf("%s uzyskał(a) %d%% w quizie %s — Siejmy QUIZ", result.Name, resultPercent, quiz.Title)
     }
     return fmt.Sprintf("%d%% w quizie %s — Siejmy QUIZ", resultPercent, quiz.Title)
 }
