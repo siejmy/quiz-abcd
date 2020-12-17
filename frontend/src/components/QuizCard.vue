@@ -1,33 +1,41 @@
 <template>
-  <b-card ref="card" class="quiz-card b-card-img-top" tag="article" no-body>
-    <template #header>
-      <ImageAspect :src="imgSrc" :alt="imgAlt" :ratio="0.7" class="card-img" />
-    </template>
-    <b-card-body class="title-body">
-      <b-card-title>{{ title }}</b-card-title>
+  <div>
+    <b-card ref="card" class="quiz-card b-card-img-top" tag="article" no-body>
+      <template #header>
+        <ImageAspect
+          :src="imgSrc"
+          :alt="imgAlt"
+          :ratio="0.7"
+          class="card-img"
+        />
+      </template>
+      <b-card-body class="title-body">
+        <b-card-title>{{ title }}</b-card-title>
 
-      <b-card-text v-if="hasTextSlot">
-        <slot name="text" />
-      </b-card-text>
-    </b-card-body>
+        <b-card-text v-if="hasTextSlot">
+          <slot name="text" />
+        </b-card-text>
+      </b-card-body>
 
-    <slot />
+      <slot />
 
-    <template #footer>
-      <div slot="footer" class="footer-content">
-        <div class="footer-l"><slot name="footer" /></div>
-        <div class="footer-r">
-          <b-button
-            variant="primary"
-            :disabled="!nextButtonEnabled"
-            @click="$emit('next')"
-          >
-            {{ nextButtonText }}
-          </b-button>
+      <template #footer>
+        <div slot="footer" class="footer-content">
+          <div class="footer-l"><slot name="footer" /></div>
+          <div class="footer-r">
+            <b-button
+              variant="primary"
+              :disabled="!nextButtonEnabled"
+              @click="$emit('next')"
+            >
+              {{ nextButtonText }}
+            </b-button>
+          </div>
         </div>
-      </div>
-    </template>
-  </b-card>
+      </template>
+    </b-card>
+    <p v-if="legalText" class="quiz-card-legal">{{ legalText }}</p>
+  </div>
 </template>
 
 <script lang="ts">
@@ -49,6 +57,9 @@ export default class extends Vue {
 
   @Prop()
   public imgAlt!: string
+
+  @Prop()
+  public legalText?: string
 
   @Prop({ default: true })
   public centerScroll!: true
@@ -102,5 +113,11 @@ export default class extends Vue {
 
 .quiz-card .footer-content .footer-lr {
   flex-grow: 0;
+}
+
+.quiz-card-legal {
+  padding-top: 0.5rem;
+  font-size: 0.75em;
+  color: #444;
 }
 </style>

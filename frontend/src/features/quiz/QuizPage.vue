@@ -4,7 +4,7 @@
       <h1>{{ title }}</h1>
     </b-row>
 
-    <ABCDQuizView v-if="quiz.type === 'abcd'" :quiz="quiz" :quizUrl="quizUrl" />
+    <ABCDQuizView v-if="quiz.type === 'abcd'" :quiz="quiz" />
     <div v-else>
       Nie znaleźliśmy odpowiedniego typu quizu. Jeśli chcesz pomóc Siejmy, to
       kontaktuj się z nami i opowiedz nam o błędzie 😇

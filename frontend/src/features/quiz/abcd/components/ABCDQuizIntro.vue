@@ -5,6 +5,7 @@
     @next="next()"
     :imgSrc="imageUrl"
     imgAlt="Wstęp do quizu"
+    :legalText="legalText"
   >
     <template #text>
       <span v-html="introHtml"></span>
@@ -35,6 +36,10 @@ export default class extends Vue {
 
   public get imageUrl(): string {
     return this.state.context.quiz.introImageUrl
+  }
+
+  public get legalText(): string | undefined {
+    return this.state.context.quiz.introLegal
   }
 
   public next() {

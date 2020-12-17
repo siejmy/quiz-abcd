@@ -6,19 +6,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
     <title><%= htmlWebpackPlugin.options.title %></title>
-
-    <!-- update the version number as needed -->
-    <script src="/__/firebase/8.0.0/firebase-app.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/8.0.0/firebase-firestore.js"></script>
-    <!-- <script defer src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script> -->
-    <!-- <script defer src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script> -->
-    <!-- <script defer src="https://www.gstatic.com/firebasejs/8.0.0/firebase-messaging.js"></script> -->
-    <!-- <script defer src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script> -->
-    <!-- <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script> -->
-    <!-- <script defer src="https://www.gstatic.com/firebasejs/8.0.0/firebase-remote-config.js"></script> -->
-    <!-- <script defer src="https://www.gstatic.com/firebasejs/8.0.0/firebase-performance.js"></script> -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
   </head>
   <body>
     <noscript>
@@ -35,12 +22,14 @@
           title: 'Sanktuaria w Polsce',
           reCaptchaKey: '6Le8g9wZAAAAAP4IGzG3h1eSg-59l3m9t59qrJ8M',
           facebookAppId: '357764061986952',
+          saveUrl: '/',
           quiz: {
             id: 'sanktuaria-demo',
             type: 'abcd',
             title: 'Sanktuaria w Polsce',
             introHtml:
               'Czy potrafisz rozpoznać, który wizarunek Matki Przenajświętszej pochodzi z jakiego sanktuarium?',
+            introLegal: 'This is a legal information for intro',
             introImageUrl: 'https://quiz.siejmy.pl/sanktuaria/sanktuaria-4.jpg',
             questions: [
               {
@@ -52,6 +41,7 @@
                   'Obory',
                   'Gietrzwałd',
                 ],
+                legal: 'This is a legal information for question',
                 correctNo: 0,
               },
               {

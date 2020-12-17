@@ -7,6 +7,7 @@
     :imgSrc="imageUrl"
     imgAlt="Ilustracja do pytania quizu"
     :nextButtonEnabled="isAnswered"
+    :legalText="legalText"
   >
     <b-form-group class="form-body">
       <b-list-group flush>
@@ -82,6 +83,10 @@ export default class extends Vue {
 
   public get question(): QuizABCDQuestion {
     return this.state.context.quiz.questions[this.questionNumber]
+  }
+
+  public get legalText(): string | undefined {
+    return this.question.legal
   }
 
   public get imageUrl(): string | undefined {
