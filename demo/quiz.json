@@ -1,10 +1,11 @@
 {
   "id": "sanktuaria-demo",
-  "title": "Sanktuaria w Polsce",
+  "title": "Sanktuaria w Polsce DEMO",
   "type": "abcd",
   "introHtml": "Czy potrafisz rozpoznać, który wizarunek Matki Przenajświętszej pochodzi z jakiego sanktuarium?",
   "metaIntro": "Czy potrafisz rozpoznać, który wizarunek Matki Przenajświętszej pochodzi z jakiego sanktuarium?",
   "introLegal": "Zdjęcia pobrane z pixabay.com - każde na zerowej licencji.",
+  "aField": "value",
   "introImageUrl": "/abcd/static/demo/s3.jpg",
   "datePublishedISO": "2020-12-15T00:24:34Z",
   "questions": [
@@ -12,6 +13,7 @@
       "title": "Co to za sanktuarium?",
       "imageUrl": "/abcd/static/demo/s1.jpg",
       "distractors": ["Częstochowa", "Ostrożany", "Obory", "Gietrzwałd"],
+      "legal": "Dodatkowe informacje o licencji lub autorstwie pojawiają się tu",
       "correctNo": 3
     },
     {

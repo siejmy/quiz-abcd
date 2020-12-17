@@ -13,6 +13,7 @@ type Quiz struct {
   Type string `json:"type"`
   Title string `json:"title"`
 	IntroHTML string `json:"introHtml"`
+	IntroLegal string `json:"introLegal"`
 	MetaIntro string `json:"metaIntro"`
   IntroImageURL string `json:"introImageUrl"`
 	Questions []QuizABCDQuestion `json:"questions"`
@@ -24,7 +25,8 @@ type QuizABCDQuestion struct {
   Title string `json:"title"`
   ImageURL string `json:"imageUrl"`
   Distractors []string  `json:"distractors"`
-  CorrectNo int8 `json:"correctNo"`
+	CorrectNo int8 `json:"correctNo"`
+	Legal string `json:"legal"`
 }
 
 // LoadQuiz loads quiz from file
