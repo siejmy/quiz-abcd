@@ -86,7 +86,12 @@ export default class extends Vue {
   }
 
   public get legalText(): string | undefined {
-    return this.question.legal
+    const questionLegal = this.question.legal || ''
+    const introLegal = this.state.context.quiz.introLegal || ''
+    if (questionLegal && introLegal) {
+      return `${questionLegal} • ${introLegal}`
+    }
+    return questionLegal || introLegal || ''
   }
 
   public get imageUrl(): string | undefined {
