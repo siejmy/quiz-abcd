@@ -35,6 +35,7 @@ func main() {
     staticFileServer := http.FileServer(http.Dir("./static"))
     http.Handle(staticRoute, http.StripPrefix(staticRoute, staticFileServer))
 
+    http.HandleFunc("/", handleRoot)
     http.HandleFunc(fmt.Sprintf("/%s/", routeBase), handleQuiz)
     http.HandleFunc(getRoute("save"), handleSave)
     http.HandleFunc(getRoute("result"), handleResult)
@@ -135,6 +136,13 @@ func handleSave(w http.ResponseWriter, r *http.Request) {
     response := make(map[string]interface{})
     response["id"] = id
     response["url"] = fmt.Sprintf("/%s/result/%s/", routeBase, id)
+    fmt.Fprintf(w, "%s", marshallToString(response))
+}
+
+
+func handleRoot(w http.ResponseWriter, r *http.Request) {
+    response := make(map[string]interface{})
+    response["location"] = fmt.Sprintf("Quiz is located at /%s/", routeBase)
     fmt.Fprintf(w, "%s", marshallToString(response))
 }
 
