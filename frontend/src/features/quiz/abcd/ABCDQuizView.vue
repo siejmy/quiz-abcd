@@ -4,9 +4,11 @@
       <state-matches :state="state">
         <template #Intro>
           <ABCDQuizIntro :interpreter="interpreter" :state="state" />
+          <ABCDQuizPreloadNextQuestion :state="state" />
         </template>
         <template #Question>
           <ABCDQuizQuestion :interpreter="interpreter" :state="state" />
+          <ABCDQuizPreloadNextQuestion :state="state" />
         </template>
         <template #ProvideDetails>
           <ABCDQuizProvideDetails :interpreter="interpreter" :state="state" />
@@ -43,6 +45,7 @@ import { Component, Inject, Prop, Vue } from 'vue-property-decorator'
 
 import {
   ABCDQuizIntro,
+  ABCDQuizPreloadNextQuestion,
   ABCDQuizProvideDetails,
   ABCDQuizQuestion,
   ABCDQuizRedirectToResults,
@@ -61,6 +64,7 @@ import { ABCDQuizInterpreter } from './machine'
     ABCDQuizProvideDetails,
     ABCDQuizRedirectToResults,
     ABCDQuizTemporaryResults,
+    ABCDQuizPreloadNextQuestion,
   },
 })
 export default class extends Vue {

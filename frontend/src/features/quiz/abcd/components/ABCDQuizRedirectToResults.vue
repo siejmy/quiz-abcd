@@ -1,5 +1,11 @@
 <template>
-  <div id="quiz-redirect-to-results"></div>
+  <div id="quiz-redirect-to-results">
+    <p class="redirect-to-results">
+      <strong>Przekierowywanie do wyniku...</strong>
+      Jeśli wynik nie otwiera się automatycznie
+      <a href="resultUrl">kliknij tu, aby zobaczyć wynik</a>.
+    </p>
+  </div>
 </template>
 
 <script lang="ts">
@@ -26,3 +32,8 @@ export default class extends Vue {
   }
 }
 </script>
+<style scoped>
+.redirect-to-results {
+  color: white;
+}
+</style>
